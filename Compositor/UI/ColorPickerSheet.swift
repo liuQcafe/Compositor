@@ -38,8 +38,8 @@ struct ColorPickerSheet: View {
                     Text("Click the canvas to sample").font(.caption).foregroundStyle(.secondary).fixedSize()
                 }
                 Spacer(minLength: 12)
-                Button("Cancel") { finish(false) }.configuredNativeShortcut(.escape)
-                Button("OK") { finish(true) }.configuredNativeShortcut(.return).buttonStyle(.borderedProminent)
+                Button("Cancel".localized) { finish(false) }.configuredNativeShortcut(.escape)
+                Button("OK".localized) { finish(true) }.configuredNativeShortcut(.return).buttonStyle(.borderedProminent)
             }
         }
         .padding(20)
