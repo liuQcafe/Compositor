@@ -5,7 +5,7 @@ struct LassoControls: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Text(session.tool == .marquee ? "Marquee" : session.tool == .wand ? "Magic" : "Lasso").font(ToolHeaderStyle.titleFont)
+            Text(session.tool == .marquee ? "Marquee".localized : session.tool == .wand ? "Magic".localized : "Lasso".localized).font(ToolHeaderStyle.titleFont)
             ScrollView(.horizontal) {
                 HStack(spacing: 12) {
                     if session.tool == .marquee {
@@ -16,7 +16,7 @@ struct LassoControls: View {
                                                  options: LassoKind.marqueeChoices) {
                             Text($0.rawValue)
                         }.fixedSize()
-                        .help("Press M to switch between Rectangle and Ellipse")
+                        .help("Press M to switch between Rectangle and Ellipse".localized)
                     }
                     if session.tool == .wand {
                         CompositorSegmentedPicker("Mode", selection: Binding(get: { session.wandMode }, set: { mode in
@@ -26,7 +26,7 @@ struct LassoControls: View {
                                                  options: WandMode.allCases) {
                             Text($0.rawValue)
                         }.fixedSize()
-                        .help("Press Tab to switch between Wand and Object")
+                        .help("Press Tab to switch between Wand and Object".localized)
                     }
                     if session.tool == .lasso {
                         CompositorSegmentedPicker("Lasso", selection: Binding(get: { session.lassoKind }, set: { kind in
@@ -36,7 +36,7 @@ struct LassoControls: View {
                                                  options: LassoKind.lassoChoices) {
                             Text($0.rawValue)
                         }.fixedSize()
-                        .help("Press L to switch between Freehand and Polygonal")
+                        .help("Press L to switch between Freehand and Polygonal".localized)
                     }
                     // Shows held Shift/Option (or an outline's mode) live; clicking sets the choice.
                     CompositorSegmentedPicker("Mode", selection: Binding(get: { session.displayedSelectionMode },
@@ -44,13 +44,13 @@ struct LassoControls: View {
                                              options: SelectionMode.allCases) {
                         Text($0.rawValue)
                     }.fixedSize()
-                                                      .help("Hold Shift to add or Option to subtract for one outline")
+                                                      .help("Hold Shift to add or Option to subtract for one outline".localized)
                     if session.tool == .wand, session.wandMode == .wand { wandControls }
                     if session.tool == .wand, session.wandMode == .object { objectSelectionControls }
                     // Rectangles snap to whole pixels, so smoothing doesn't apply (as in Photoshop); ellipses curve.
                     if session.tool == .lasso || session.tool == .wand || (session.tool == .marquee && session.marqueeKind == .ellipse) {
-                        Toggle("Anti-alias", isOn: $session.selectionAntialiased)
-                            .help(session.tool == .wand && session.wandMode == .object ? "Smooth the detected object outline; turn off for the raw pixel mask" : "Smooth selection edges; turn off for hard pixel edges")
+                        Toggle("Anti-alias".localized, isOn: $session.selectionAntialiased)
+                            .help(session.tool == .wand && session.wandMode == .object ? "Smooth the detected object outline; turn off for the raw pixel mask".localized : "Smooth selection edges; turn off for hard pixel edges".localized)
                     }
                     Divider().frame(height: 18)
                     modifyControls
@@ -60,7 +60,7 @@ struct LassoControls: View {
             Spacer(minLength: 0)
             if let selection = session.selection {
                 if selection.isEmpty { Text("Empty selection").foregroundStyle(.secondary) }
-                Button("Deselect") { session.deselect() }.disabled(!session.canEditSelection)
+                Button("Deselect".localized) { session.deselect() }.disabled(!session.canEditSelection)
             }
         }
         .padding(.horizontal, 18).toolHeaderBar().releasesFocusOnCommit(session)
@@ -79,19 +79,19 @@ struct LassoControls: View {
                     .arrowSteps(value: { Double(session.wandSettings.tolerance) },
                                 change: { session.wandSettings.tolerance = Int(min(255, max(0, $0.rounded()))) })
             }
-            .help("How far each color channel (0–255) can differ from the clicked color and still be selected")
-            Picker("Sample Size", selection: $session.wandSettings.sampleSize) {
-                ForEach(WandSampleSize.allCases, id: \.self) { Text($0.title).tag($0) }
+            .help("How far each color channel (0–255) can differ from the clicked color and still be selected".localized)
+            Picker("Sample Size".localized, selection: $session.wandSettings.sampleSize) {
+                ForEach(WandSampleSize.allCases, id: \.self) { Text($0.localizedName).tag($0) }
             }
             .labelsHidden().fixedSize()
-            .help("Match the clicked pixel, or the average of the pixels around it")
+            .help("Match the clicked pixel, or the average of the pixels around it".localized)
             CompositorSegmentedPicker("Sample", selection: $session.wandSettings.sampleAllLayers,
                                      options: [false, true]) {
                 $0 ? Text("All Layers") : Text("This Layer")
             }.fixedSize()
-            .help("Read colors from the active layer only, or from every visible layer as shown")
-            Toggle("Contiguous", isOn: $session.wandSettings.contiguous)
-                .help("Select only similar pixels connected to the one you click; off selects them everywhere")
+            .help("Read colors from the active layer only, or from every visible layer as shown".localized)
+            Toggle("Contiguous".localized, isOn: $session.wandSettings.contiguous)
+                .help("Select only similar pixels connected to the one you click; off selects them everywhere".localized)
         }
     }
 
@@ -101,7 +101,7 @@ struct LassoControls: View {
                                      options: [false, true]) {
                 $0 ? Text("All Layers") : Text("This Layer")
             }.fixedSize()
-            .help("Analyze the active layer only, or every visible layer as shown")
+            .help("Analyze the active layer only, or every visible layer as shown".localized)
             HStack(spacing: 6) {
                 Text("Edge").scrubbable(sensitivity: 1, value: $session.objectSelectionSettings.edgeOffset, range: -10...10)
                 TextField("Edge", value: Binding(get: { session.objectSelectionSettings.edgeOffset },
@@ -114,7 +114,7 @@ struct LassoControls: View {
             // The bar squeezes text before controls, so without this the label collapses to
             // nothing the moment a selection adds its own buttons, leaving an unlabelled number box.
             .fixedSize()
-            .help("Positive values tighten the detected mask inward; negative values expand it outward")
+            .help("Positive values tighten the detected mask inward; negative values expand it outward".localized)
         }
     }
 
@@ -261,10 +261,10 @@ struct SelectionAmountSheet: View {
                 .opacity(amount == nil ? 1 : 0)
             Divider()
             HStack {
-                Button("Cancel") { session.selectionAmountOperation = nil }
+                Button("Cancel".localized) { session.selectionAmountOperation = nil }
                     .configuredNativeShortcut(.escape)
                 Spacer()
-                Button("OK") {
+                Button("OK".localized) {
                     if let amount { session.confirmSelectionAmount(amount) }
                 }
                 .configuredNativeShortcut(.return).buttonStyle(.borderedProminent)

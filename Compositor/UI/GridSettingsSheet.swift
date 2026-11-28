@@ -54,16 +54,16 @@ struct GridSettingsSheet: View {
         VStack(alignment: .leading, spacing: 18) {
             HStack {
                 Text("Color").frame(width: 110, alignment: .leading)
-                Picker("Color", selection: $appearance.preset) {
-                    ForEach(GridAppearance.Preset.allCases) { Text($0.rawValue).tag($0) }
+                Picker("Color".localized, selection: $appearance.preset) {
+                    ForEach(GridAppearance.Preset.allCases) { Text($0.localizedName).tag($0) }
                 }.labelsHidden()
                 DialogColorSwatch(title: Self.colorPickerTitle, color: swatchColor, session: session)
-                    .help("Choose a custom grid color")
+                    .help("Choose a custom grid color".localized)
             }
             HStack {
                 Text("Style").frame(width: 110, alignment: .leading)
-                Picker("Style", selection: $appearance.style) {
-                    ForEach(GridAppearance.Style.allCases) { Text($0.rawValue).tag($0) }
+                Picker("Style".localized, selection: $appearance.style) {
+                    ForEach(GridAppearance.Style.allCases) { Text($0.localizedName).tag($0) }
                 }.labelsHidden()
             }
             HStack {
@@ -93,8 +93,8 @@ struct GridSettingsSheet: View {
                 .foregroundStyle(valid ? Color.secondary : Color.orange).font(.callout)
                 .fixedSize(horizontal: false, vertical: true)
             HStack {
-                Button("Cancel") { finish(nil) }.configuredNativeShortcut(.escape)
-                Button("Restore Defaults") {
+                Button("Cancel".localized) { finish(nil) }.configuredNativeShortcut(.escape)
+                Button("Restore Defaults".localized) {
                     spacing = LayoutGrid().spacing
                     subdivisions = LayoutGrid().subdivisions
                     // The Custom color is kept, so it's still there if Custom is chosen again.
@@ -104,7 +104,7 @@ struct GridSettingsSheet: View {
                     appearance.opacity = GridAppearance().opacity
                 }
                 Spacer()
-                Button("OK") {
+                Button("OK".localized) {
                     guard valid else { return }
                     DialogColorSwatch.closePicker(session, title: Self.colorPickerTitle)
                     finish((grid, appearance))

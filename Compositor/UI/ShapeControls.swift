@@ -25,7 +25,7 @@ struct ShapeControls: View {
                                      options: ShapeKind.allCases) {
                 Text($0.rawValue)
             }.fixedSize()
-            .help("Shift-U (or Tab) steps through Rectangle, Ellipse and Line")
+            .help("Shift-U (or Tab) steps through Rectangle, Ellipse and Line".localized)
             HStack(spacing: 6) {
                 Text(showsStroke ? "Fill" : "Color")
                 Button { session.openShapeFillPicker() } label: {
@@ -76,10 +76,10 @@ struct ShapeControls: View {
                 }
                 HStack(spacing: 6) {
                     Text("Style")
-                    Picker("Style", selection: Binding(get: { session.displayedLineStyle },
+                    Picker("Style".localized, selection: Binding(get: { session.displayedLineStyle },
                                                       set: { session.setDisplayedLineStyle($0) })) {
                         ForEach(ShapeLineStyle.allCases, id: \.self) { style in
-                            Image(nsImage: LineSample.style(style)).accessibilityLabel(style.rawValue).tag(style)
+                            Image(nsImage: LineSample.style(style)).accessibilityLabel(style.localizedName).tag(style)
                         }
                     }
                     .pickerStyle(.menu).labelsHidden().fixedSize()
@@ -88,10 +88,10 @@ struct ShapeControls: View {
                       : "Solid, dashed or dotted; dashes grow with the line's width")
                 HStack(spacing: 6) {
                     Text("Cap")
-                    Picker("Cap", selection: Binding(get: { session.displayedLineCap },
+                    Picker("Cap".localized, selection: Binding(get: { session.displayedLineCap },
                                                     set: { session.setDisplayedLineCap($0) })) {
                         ForEach(ShapeLineCap.allCases, id: \.self) { cap in
-                            Label { Text(cap.rawValue) } icon: { Image(nsImage: LineSample.cap(cap)) }.tag(cap)
+                            Label { Text(cap.localizedName) } icon: { Image(nsImage: LineSample.cap(cap)) }.tag(cap)
                         }
                     }
                     .pickerStyle(.menu).labelsHidden().fixedSize()
@@ -115,7 +115,7 @@ struct ShapeControls: View {
                 .help(editsSelection
                       ? "Round this rectangle's corners by this many pixels; 0 keeps them square"
                       : "Round the rectangle's corners by this many pixels; 0 keeps them square")
-                Toggle("Smooth Corners", isOn: Binding(get: { session.displayedShapeSmoothing },
+                Toggle("Smooth Corners".localized, isOn: Binding(get: { session.displayedShapeSmoothing },
                                                       set: { session.setDisplayedShapeSmoothing($0) }))
                     .toggleStyle(.checkbox)
                     .fixedSize()

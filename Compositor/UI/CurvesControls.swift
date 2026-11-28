@@ -14,8 +14,8 @@ struct CurvesControls: View {
     }
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Picker("Channel", selection: $settings.channel) {
-                ForEach(LevelsChannel.allCases, id: \.self) { Text($0.rawValue).tag($0) }
+            Picker("Channel".localized, selection: $settings.channel) {
+                ForEach(LevelsChannel.allCases, id: \.self) { Text($0.rawValue.localized).tag($0) }
             }.onChange(of: settings.channel) { _, _ in selected = nil; dragging = nil }
             Canvas { context, size in
                 func position(_ p: CurvePoint) -> CGPoint { CGPoint(x: p.x/255*size.width, y: (1-p.y/255)*size.height) }
@@ -89,7 +89,7 @@ struct CurvesControls: View {
                     Text("Input \(Int(points[selected].x)) · Output \(Int(points[selected].y))").monospacedDigit()
                 }
                 Spacer()
-                Button("Remove point") {
+                Button("Remove point".localized) {
                     if let selected, selected > 0, selected < points.count-1 { settings.channels[settings.channel.index].remove(at: selected); self.selected = nil }
                 }.disabled(selected == nil || selected == 0 || selected == points.count-1)
             }
